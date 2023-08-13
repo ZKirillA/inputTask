@@ -1,26 +1,45 @@
 import java.util.Scanner;
 
 public class BaseConverter {
-
-    public static void main(String[] args) {
-        convert();
+    public double convert(String to, double celsius){
+        switch(to){
+            case "Kelvin":
+                return celsius + 273.15;
+            case "Fahrenheit":
+                return (celsius*9.0/5.0)+32;
+            default:
+                throw new IllegalArgumentException("Неверный тип конвертации"+ to);
+        }
     }
 
-    private static void convert() {
-        System.out.println("Введите температуру в Цельсиях");
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int Celsiy = scanner.nextInt();
-        System.out.println("Выберите: 1 - Перевести в Фаренгейты, 2 - Перевести в Кельвины");
-        Scanner scanner2 = new Scanner(System.in);
-        int result = scanner2.nextInt();
-        if (result == 1) {
-            int Fahrengeit = (Celsiy * 9 / 5) + 32;
-            System.out.println("Температура в фаренгейтах равна " + Fahrengeit + " градусов");
-        } else if (result == 2) {
-            double Kelvin = Celsiy + 273.15;
-            System.out.println("Температура в кельвинах равна " + Kelvin + " градусов");
-        } else {
-            System.out.println("Вы выбрали некорректное значение");
+        BaseConverter converter = new BaseConverter();
+
+        double celsius = 0.0;
+        boolean isCelsiusValid = false;
+        while(!isCelsiusValid){
+            System.out.println("Введите температуру в градусах Цельсия: ");
+            if(scanner.hasNextDouble()){
+                celsius=scanner.nextDouble();
+                isCelsiusValid=true;
+            } else{
+                System.out.println("Некорректное значение. Попробуйте еще раз.");
+                scanner.next();
+            }
         }
+        String conversionType = "";
+        boolean isValidConversion = false;
+        while(!isValidConversion){
+            System.out.println("Введите 'Kelvin' для конвертации в Кельвины или введите 'Fahrenheit' для конвертации в Фаренгейты");
+            conversionType=scanner.next();
+            if(conversionType.equals("Kelvin")||conversionType.equals("Fahrenheit")){
+                isValidConversion = true;
+            } else{
+                System.out.println("Некорректный тип конвертации. Попробуйте еще раз");
+            }
+        }
+        double result = converter.convert(conversionType, celsius);
+        System.out.println("Результат конвертации: "+ result+" "+conversionType);
     }
 }
